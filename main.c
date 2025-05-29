@@ -3,150 +3,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <ctype.h>
+#include "parsers.h"
+#include "structs.h"
+#include "swap.h"
 #define BUFFER_SIZE 256
-
-
-typedef struct Complex {
-    double cReal;
-    double cImag;
-}complex;
-
-int isinitLine(char *line);
-int parseQubits(char *line);
-void formatStandard();
-complex *parseInit(char *line, int qubits);
-char *readLine(FILE *toRead);
-void swap(char *a, char *b);
-
-
-int isqubitLine(char *line){
-
-    char word[] = "#qubits";
-
-    if(strstr(line,word) != NULL){
-        return 1;
-    }else{
-        return 0;
-    }
-}
-
-int isinitLine(char *line){
-
-    char word[] = "#init";
-
-    if(strstr(line,word) != NULL){
-        return 1;
-    }else{
-        return 0;
-    }
-
-}
-
-int parseQubits(char *line){
-
-    char word[strlen("#qubits")];
-    int qubits;
-
-    if(sscanf(line, "%s %d", word, &qubits) ==2)
-        return qubits;
-
-
-    return 0;
-
-
-}
-
-void formatStandard(){
-
-}
-
-complex *parseInit(char *line, int numVelem){
-
-    char *pretoken = strchr(line, '[');
-    double real, imaginary;
-    complex *cnumbers = malloc(numVelem * sizeof(complex));
-    int index = 0;
-
-    if(pretoken != NULL){
-        pretoken++;
-
-        char *token = strtok(pretoken, " ,");
-
-        while(token && isdigit(*token)){
-
-            char *i = strchr(token, 'i');
-
-            if(i != NULL){
-
-                char *j = i+1;
-                while(isdigit(*j) || *j == '.'){
-                    swap(i,j);
-                    i++;
-                    j++;
-                }
-
-            }
-
-            sscanf(token, "%lf%lf", &real, &imaginary);
-            printf("Real: %g\n", real);
-            printf("Imaginary: %gi\n\n", imaginary);
-            cnumbers[index].cReal = real;
-            cnumbers[index].cImag = imaginary;
-
-
-            //printf("%g%c%c%g\n",   a, op, im, b );
-            token = strtok(NULL, " ,]");
-            index++;
-        }
-
-        printf("N elem in vector: %d\n", numVelem );
-
-    }else{
-
-        printf("Character '[' not found in line.\n");
-        
-    }
-
-    return cnumbers;
-
-}
-
-
-
-char *readLine(FILE *toRead){
-
-    char *buffer = NULL;
-    size_t size = 0;
-
-    char *newLine_Found = NULL;
-
-    do{
-        //reallocate the buffer to accomodate more characters (initial allocation is 0)
-        if((buffer = realloc(buffer, (size + BUFSIZ) * sizeof(char))) == NULL){
-            perror("Error (message): ");
-            exit(EXIT_FAILURE);         // Exit on realloc failure
-        }
-
-        //check for end-for-file (fgets == NULL return value indicates an error or an end-of-file conditionL)
-        if(fgets(buffer + size, BUFSIZ, toRead) == NULL){
-            return NULL;
-        }
-
-        //Search for newline character within the recent read portion
-        newLine_Found = strchr(buffer + size, '\n');
-    }while(!newLine_Found && (size += BUFSIZ));
-
-    return buffer;
-
-
-
-}
-
-void swap(char *a, char *b){
-    char temp = *a;
-    *a = *b;
-    *b = temp;
-}
 
 
 int main(){
@@ -171,7 +31,7 @@ int main(){
             
         }else if(isinitLine(line)){
             printf("Numero di qubits: %d\n\n",qubits);
-            complex *arrayCompNum = parseInit(line, numVelem);
+            compNumber *arrayCompNum = parseInit(line, numVelem);
 
             for(int i = 0; i < numVelem; i++){
                 printf("Real: %g, Imaginary: %g\n\n", arrayCompNum[i].cReal, arrayCompNum[i].cImag);
@@ -182,8 +42,64 @@ int main(){
 
     int i = 0;
     while((line = readLine(readCirc)) != NULL){
-        printf("Linea %d: %s", i,line);
+        //printf("Linea %d: %s", i,line);
 
+        char *pretoken = strchr(line, '(');  // start of the matrix part
+        char *currChar = NULL;
+        char *gateArray = NULL;
+        int size = 0;
+        int index = 0;
+        int qubits = 2;
+
+        if ((currChar = strstr(line, "#define")) != NULL) {
+            printf("\n\nSubstring '#define' was found in the line.\n");
+
+            // Allocate space for gateArray (1 character in this case)
+            size++;
+            gateArray = realloc(gateArray, size);
+
+            if (gateArray == NULL) {
+                perror("realloc failed");
+                return 1;
+            }
+
+            // Move to the gate character (e.g., X)
+            while (!isupper(*currChar)) {
+                currChar++;
+            }
+
+            gateArray[index] = *currChar;
+            printf("Gate: %c\n", *currChar);
+
+            // Start parsing the matrix content
+            if (pretoken != NULL) {
+                char *token = strtok(pretoken, "()]");  // Split on ')' or ']'
+                char *copyToken = NULL;
+                char *tokenArray[qubits];
+
+                int index = 0;
+
+                while (token != NULL) {
+
+                    //token += strspn(token, "( ");
+                    if(token != NULL && strlen(token) > 0 && !isspace(token[0])) {
+
+                        //printf("Iterazione....\n");
+                        //printf("Token: %s\n", token);
+
+                        tokenArray[index] = token;
+                        index++;
+                    }
+
+                    token = strtok(NULL, "()]");
+                }
+                subToken(tokenArray, qubits);
+            } else {
+
+                printf("Substring '#define' wasn't found in the line.\n");
+            }
+            free(gateArray);
+        }
         i++;
     }
 
@@ -192,3 +108,10 @@ int main(){
 
     return 0;
 }
+
+
+
+
+
+
+
