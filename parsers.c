@@ -18,7 +18,6 @@ int isqubitLine(char *line){
 }
 
 
-
 int isinitLine(char *line){
 
     char word[] = "#init";
@@ -32,13 +31,12 @@ int isinitLine(char *line){
 }
 
 
-
 int parseQubits(char *line){
 
     char word[strlen("#qubits")];
     int qubits;
 
-    if(sscanf(line, "%s %d", word, &qubits) ==2)
+    if(sscanf(line, "%s %d", word, &qubits) == 2)
         return qubits;
 
 
@@ -121,6 +119,7 @@ char *readLine(FILE *toRead){
 
         //Search for newline character within the recent read portion
         newLine_Found = strchr(buffer + size, '\n');
+
     }while(!newLine_Found && (size += BUFSIZ));
 
     return buffer;
@@ -130,14 +129,7 @@ char *readLine(FILE *toRead){
 }
 
 
-
-
-
-
-
-
-
-void subToken(char **tokenArray, int size) {
+compNumber **subToken(char **tokenArray, int size) {
 
 	compNumber gateRow[size][size];
 	char *subToken = NULL;
@@ -191,4 +183,6 @@ void subToken(char **tokenArray, int size) {
 			
 		}
 	}
+
+    return gateRow;
 }

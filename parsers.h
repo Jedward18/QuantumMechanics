@@ -9,6 +9,6 @@ int isqubitLine(char *line);
 int isinitLine(char *line);
 int parseQubits(char *line);
 char *readLine(FILE *toRead);
-void subToken(char **tokenArray, int size);
+compNumber **subToken(char **tokenArray, int size);
 
 #endif

@@ -7,8 +7,9 @@ typedef struct compNumberTag{
 } compNumber;
 
 typedef struct mapGatesTag{
-    char name;
+    char letter;
     compNumber **matrix;
+    struct mapGatesTag *next;
 
 } mapGates;
 
