@@ -9,7 +9,7 @@ mapGates *hashtable[TABLE_SIZE];
 unsigned int hash(char letter){
     
     unsigned int hashvalue =  letter;
-    hashvalue = (hashvalue + 10) % TABLE_SIZE;
+    hashvalue = (hashvalue + 1) % TABLE_SIZE;
 
     return hashvalue;
 
