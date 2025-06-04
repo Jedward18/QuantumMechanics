@@ -131,9 +131,13 @@ char *readLine(FILE *toRead){
 
 compNumber **subToken(char **tokenArray, int size) {
 
-	compNumber gateRow[size][size];
+	compNumber **gateRow = NULL;
 	char *subToken = NULL;
 
+    gateRow = realloc(gateRow, size *sizeof(compNumber));
+    for (int i = 0; i < size; ++i){
+        gateRow[i] = malloc(size * sizeof(compNumber));
+    }
 
 	if (gateRow == NULL) {
 		perror("malloc failed");

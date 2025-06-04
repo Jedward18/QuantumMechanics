@@ -41,7 +41,8 @@ int main(){
 
 
 
-
+    init_hashtable();
+    printHashTable();
     int i = 0;
     while((line = readLine(readCirc)) != NULL){
 
@@ -94,6 +95,10 @@ int main(){
                 }
                 
                 compNumber **gateRow = subToken(tokenArray, numVelem);
+                mapGates *currMapGate = malloc(sizeof(mapGates));
+                currMapGate->letter = *currLine;
+                currMapGate->matrix = gateRow;
+                hashtable_insert(currMapGate);
             
             } else {
 
@@ -136,6 +141,9 @@ int main(){
         }
         
     }
+
+    
+    printHashTable();
 
     fclose(readInit);
     fclose(readCirc);
