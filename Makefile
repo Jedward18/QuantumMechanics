@@ -3,8 +3,8 @@
 # This Makefile compiles the source files and links them into an executable named 'app'
 all: app
 
-app: main.o parsers.o hashing.o swap.o
-	gcc -o app main.o parsers.o hashing.o swap.o
+app: main.o parsers.o hashing.o swap.o operations.o
+	gcc -o app main.o parsers.o hashing.o swap.o operations.o
 
 main.o: main.c
 	gcc -c main.c
@@ -17,6 +17,9 @@ hashing.o: hashing.c
 
 swap.o: swap.c
 	gcc -c swap.c
+
+operations.o: operations.c
+	gcc -c operations.c
 
 clean:
 	rm -rf *o app

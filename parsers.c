@@ -193,7 +193,7 @@ compNumber **subToken(char **tokenArray, int size) {
 
 
 
-void read_InitFile(char *filename, int *qubits, int *numVelem){
+void read_InitFile(char *filename, int *qubits, int *numVelem, compNumber **initArray){
     FILE *readInit; //dichiarazione puntatore per il file
     readInit = fopen(filename, "r"); //fopen ritorna un FILE pointer se il file `e stato aperto correttamente
     char *line = NULL; //variabile per la memorizzazione/lettura di ogni riga
@@ -207,10 +207,11 @@ void read_InitFile(char *filename, int *qubits, int *numVelem){
             
         }else if(isinitLine(line)){
             printf("Numero di qubits: %d\n\n",*qubits);
-            compNumber *arrayCompNum = parseInit(line, *numVelem);
+            *initArray = realloc(*initArray, *numVelem * sizeof(compNumber));
+            *initArray = parseInit(line, *numVelem);
 
             for(int i = 0; i < *numVelem; i++){
-                printf("Real: %g, Imaginary: %g\n\n", arrayCompNum[i].cReal, arrayCompNum[i].cImag);
+                printf("Real: %g, Imaginary: %g\n\n", (*initArray)[i].cReal, (*initArray)[i].cImag);
             }   
 
         }
@@ -221,7 +222,7 @@ void read_InitFile(char *filename, int *qubits, int *numVelem){
 
 
 
-void read_CircFile(char *filename, int numVelem, char *ordineArray){
+void read_CircFile(char *filename, int numVelem, char **ordineArray, int *ordineArrayLen){
     FILE *readCirc;
     readCirc = fopen(filename, "r");
     char *line = NULL;
@@ -291,31 +292,34 @@ void read_CircFile(char *filename, int numVelem, char *ordineArray){
 
         } else if((currLine = strstr(line, "#circ")) != NULL){
             printf("\n\nSubstring '#circ' was found in the line.\n");
-            int size = 0, index = 0;
+            int size = 0;
+            *ordineArrayLen = 0;
 
             while(*currLine != '\n'){
                 
                 if(isupper(*currLine)){
                     size++;
-                    ordineArray = realloc(ordineArray,size);
+                    *ordineArray = realloc(*ordineArray,size);
 
                     if (ordineArray == NULL) {
                         perror("realloc failed");
                         break; // Exit the loop if realloc fails
                     }
 
-                    ordineArray[index] = *currLine;
-                    index++;
+                    (*ordineArray)[*ordineArrayLen] = *currLine;
+                    (*ordineArrayLen)++;
 
                 }
                 currLine++;
             }
 
+            printf("OrdineArrayLen: %d\n", *ordineArrayLen);
             printf("Ordine degli gates: \n");
+            
 
             for(int i = 0; i < size; i++){
 
-                printf("%c\n", ordineArray[i]);
+                printf("%c\n", (*ordineArray)[i]);
 
             }
 
