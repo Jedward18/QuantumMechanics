@@ -14,15 +14,16 @@ int main(){
 
     char *initfilename = "init-ex.txt";
     char *circfilename = "circ-ex.txt";
+    char *ordineArray = NULL;
 
     int qubits, numVelem;
 
     read_InitFile(initfilename, &qubits, &numVelem);
     init_hashtable();
     printHashTable();
-    read_CircFile(circfilename, numVelem);
-    
+    read_CircFile(circfilename, numVelem, ordineArray);   
     printHashTable();
     
     return 0;
+
 }

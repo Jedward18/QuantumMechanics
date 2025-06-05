@@ -221,7 +221,7 @@ void read_InitFile(char *filename, int *qubits, int *numVelem){
 
 
 
-void read_CircFile(char *filename, int numVelem){
+void read_CircFile(char *filename, int numVelem, char *ordineArray){
     FILE *readCirc;
     readCirc = fopen(filename, "r");
     char *line = NULL;
@@ -280,6 +280,7 @@ void read_CircFile(char *filename, int numVelem){
                 mapGates *currMapGate = malloc(sizeof(mapGates));
                 currMapGate->letter = *currLine;
                 currMapGate->matrix = gateRow;
+                
                 hashtable_insert(currMapGate);
             
             } else {
@@ -290,8 +291,6 @@ void read_CircFile(char *filename, int numVelem){
 
         } else if((currLine = strstr(line, "#circ")) != NULL){
             printf("\n\nSubstring '#circ' was found in the line.\n");
-
-            char *ordineArray = NULL;
             int size = 0, index = 0;
 
             while(*currLine != '\n'){
