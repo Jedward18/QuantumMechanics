@@ -22,7 +22,6 @@ void matrixVector(char *ordineArray, compNumber *initArray, int numVelem, int or
 
     printf("PRE FOR LOOP, LAST INDEX: %d\n", last_index);
     for(int k = last_index; k >= 0; k--){
-        printf("Inniest Loop\n");
         letter = ordineArray[k];
         
         gateStruct = hashtable_lookup(letter);
@@ -45,13 +44,17 @@ void matrixVector(char *ordineArray, compNumber *initArray, int numVelem, int or
                 temp[i].cImag += (gateMatrix[i][j].cReal * initArray[j].cImag) + (gateMatrix[i][j].cImag * initArray[j].cReal);
                 
             }
+            printf("Real: %g, Imaginary: %g\n\n", temp[i].cReal, temp[i].cImag);
+            
+            
+            //printf("Real: %g, Imaginary: %g\n\n", initArray[i].cReal, initArray[i].cImag);
             
         }
-        printf("I AM HERE\n");
-        //copy the result in the initArray
         memcpy(initArray, temp, sizeof(compNumber) * numVelem);
-
+        
+        
     }
+
 
     printf("OPERATIONS FINISHEDD!!!!!!!!");
     

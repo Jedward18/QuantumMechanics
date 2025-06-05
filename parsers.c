@@ -209,10 +209,11 @@ void read_InitFile(char *filename, int *qubits, int *numVelem, compNumber **init
             printf("Numero di qubits: %d\n\n",*qubits);
             *initArray = realloc(*initArray, *numVelem * sizeof(compNumber));
             *initArray = parseInit(line, *numVelem);
-
+            /*
             for(int i = 0; i < *numVelem; i++){
                 printf("Real: %g, Imaginary: %g\n\n", (*initArray)[i].cReal, (*initArray)[i].cImag);
             }   
+            */
 
         }
     }
@@ -312,7 +313,7 @@ void read_CircFile(char *filename, int numVelem, char **ordineArray, int *ordine
                 }
                 currLine++;
             }
-
+        /*
             printf("OrdineArrayLen: %d\n", *ordineArrayLen);
             printf("Ordine degli gates: \n");
             
@@ -322,6 +323,7 @@ void read_CircFile(char *filename, int numVelem, char **ordineArray, int *ordine
                 printf("%c\n", (*ordineArray)[i]);
 
             }
+        */
 
         }
         

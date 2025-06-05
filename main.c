@@ -9,13 +9,28 @@
 #include "hashing.h"
 #include "operations.h"
 
+void convertToStr(char ***outStrArr, compNumber *initArray, int numVelem){
+    
 
+    *outStrArr = realloc(*outStrArr, numVelem * (sizeof(char*)));
+    for(int i = 0; i < numVelem; i++){
+        (*outStrArr)[i] = malloc(15);
+        if(initArray[i].cImag < 0){
+            sprintf((*outStrArr)[i], "%g-i%g", initArray[i].cReal, -initArray[i].cImag);
+        }else{
+            sprintf((*outStrArr)[i], "%g+i%g\n", initArray[i].cReal, initArray[i].cImag);
+        }
+        
+    }
+
+}
 
 int main(){
 
     char *initfilename = "init-ex.txt";
     char *circfilename = "circ-ex.txt";
     char *ordineArray = NULL;
+    char **outStrArr = NULL;
     int qubits, numVelem, ordineArrayLen;
     compNumber *initArray = NULL;
 
@@ -25,22 +40,28 @@ int main(){
     read_CircFile(circfilename, numVelem, &ordineArray, &ordineArrayLen);   
     printHashTable();
 
+    printf("ORDINE MATRICI: ");
     for(int i = 0; i < ordineArrayLen; i++){
-        printf("Ordine array: %c\n",ordineArray[i]);
+        printf(" %c ",ordineArray[i]);
     }
 
+    printf("\n#INIT CONTENT: \n");
     for(int i = 0; i < numVelem; i++){
         printf("Real: %g, Imaginary: %g\n\n", initArray[i].cReal, initArray[i].cImag);
     }
+
+
     matrixVector(ordineArray, initArray, numVelem, ordineArrayLen);
-    
+    convertToStr(&outStrArr, initArray, numVelem);
+    printf("\nVFIN OUTPUT: \n");
+    /*
+    for(int i = 0; i < numVelem; i++){
+        printf("Real: %g, Imaginary: %g\n\n", initArray[i].cReal, initArray[i].cImag);
+    */
+    for(int i = 0; i < numVelem; i++){
+        printf("%s\n",outStrArr[i]);
+    }
     return 0;
 
-    // to make the multiplications
-    /*
-    i need the list of the letters
-    i need vin
-    i need functions for addition and moltiplication
-    */
 
 }
