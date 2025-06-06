@@ -42,14 +42,14 @@
 **To build:**
     make
 
-**To Run**
+**To Run:**
     ./app -i <init_file> -c <circ_file> 
     Example: ./app -i init-ex.txt -c circ-ex.txt
 
-**Output**
+**Output:**
     The program prints the final state vector after doing all the operations
 
-**Output Example**
+**Output Example:**
     Vout OUTPUT:
     0.5-i0.5
     0.5+i0.5    
