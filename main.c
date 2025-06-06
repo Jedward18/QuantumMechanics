@@ -18,11 +18,30 @@ void convertToStr(char ***outStrArr, compNumber *initArray, int numVelem){
         if(initArray[i].cImag < 0){
             sprintf((*outStrArr)[i], "%g-i%g", initArray[i].cReal, -initArray[i].cImag);
         }else{
-            sprintf((*outStrArr)[i], "%g+i%g\n", initArray[i].cReal, initArray[i].cImag);
+            sprintf((*outStrArr)[i], "%g+i%g", initArray[i].cReal, initArray[i].cImag);
         }
         
     }
 
+}
+
+int getValidFilename(char *prompt, char *filename, size_t size) {
+    printf("%s", prompt);
+    if (fgets(filename, size, stdin) == NULL) {
+        fprintf(stderr, "Errore nella lettura del nome del file.\n");
+        return 1;
+    }
+    // Remove newline character if present
+    if (strlen(filename) > 0 && filename[strlen(filename) - 1] == '\n') {
+        filename[strlen(filename) - 1] = '\0';
+    }
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL) {
+        fprintf(stderr, "Errore: il file \"%s\" non esiste o non può essere aperto.\n", filename);
+        return 1;
+    }
+    fclose(fp);
+    return 0;
 }
 
 int main(){
@@ -31,25 +50,11 @@ int main(){
     char circfilename[20];
 
     //read the name of the init file
-    printf("Inserisci il nome del primo file: (ex. init-ex.txt) ");
-    if(fgets(initfilename, sizeof(initfilename), stdin) == NULL){
-        fprintf(stderr, "Errore nella lettura del nome del init file.\n");
+    if (getValidFilename("Inserisci il nome del primo file: (ex. init-ex.txt) ", initfilename, sizeof(initfilename))) {
         return 1;
     }
-    //remove any non necessary characters
-    if(strlen(initfilename) > 0 && initfilename[strlen(initfilename)-1] == '\n'){
-        initfilename[strlen(initfilename)-1] = '\0';
-    }
-
-    //read the name of the circ file
-    printf("Inserisci il nome del primo file: (ex. circ-ext.txt) ");
-    if(fgets(circfilename, sizeof(circfilename), stdin) == NULL){
-        fprintf(stderr, "Errore nella lettura del nome del init file.\n");
+    if (getValidFilename("Inserisci il nome del secondo file: (ex. circ-ex.txt) ", circfilename, sizeof(circfilename))) {
         return 1;
-    }
-    //remove any non necessary characters
-    if(strlen(circfilename) > 0 && circfilename[strlen(circfilename)-1] == '\n'){
-        circfilename[strlen(circfilename)-1] = '\0';
     }
 
 
@@ -78,7 +83,8 @@ int main(){
     
     printf("\nVFIN OUTPUT: \n");
     for(int i = 0; i < numVelem; i++){
-        printf("%s\n",outStrArr[i]);
+        printf("%s",outStrArr[i]);
+        printf("\n");
     }
     return 0;
 
