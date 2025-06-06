@@ -27,8 +27,32 @@ void convertToStr(char ***outStrArr, compNumber *initArray, int numVelem){
 
 int main(){
 
-    char *initfilename = "init-ex.txt";
-    char *circfilename = "circ-ex.txt";
+    char initfilename[20];
+    char circfilename[20];
+
+    //read the name of the init file
+    printf("Inserisci il nome del primo file: (ex. init-ex.txt) ");
+    if(fgets(initfilename, sizeof(initfilename), stdin) == NULL){
+        fprintf(stderr, "Errore nella lettura del nome del init file.\n");
+        return 1;
+    }
+    //remove any non necessary characters
+    if(strlen(initfilename) > 0 && initfilename[strlen(initfilename)-1] == '\n'){
+        initfilename[strlen(initfilename)-1] = '\0';
+    }
+
+    //read the name of the circ file
+    printf("Inserisci il nome del primo file: (ex. circ-ext.txt) ");
+    if(fgets(circfilename, sizeof(circfilename), stdin) == NULL){
+        fprintf(stderr, "Errore nella lettura del nome del init file.\n");
+        return 1;
+    }
+    //remove any non necessary characters
+    if(strlen(circfilename) > 0 && circfilename[strlen(circfilename)-1] == '\n'){
+        circfilename[strlen(circfilename)-1] = '\0';
+    }
+
+
     char *ordineArray = NULL;
     char **outStrArr = NULL;
     int qubits, numVelem, ordineArrayLen;
@@ -36,7 +60,6 @@ int main(){
 
     read_InitFile(initfilename, &qubits, &numVelem, &initArray);
     init_hashtable();
-    //printHashTable();
     read_CircFile(circfilename, numVelem, &ordineArray, &ordineArrayLen);   
     printHashTable();
 
@@ -50,14 +73,10 @@ int main(){
         printf("Real: %g, Imaginary: %g\n\n", initArray[i].cReal, initArray[i].cImag);
     }
 
-
     matrixVector(ordineArray, initArray, numVelem, ordineArrayLen);
     convertToStr(&outStrArr, initArray, numVelem);
+    
     printf("\nVFIN OUTPUT: \n");
-    /*
-    for(int i = 0; i < numVelem; i++){
-        printf("Real: %g, Imaginary: %g\n\n", initArray[i].cReal, initArray[i].cImag);
-    */
     for(int i = 0; i < numVelem; i++){
         printf("%s\n",outStrArr[i]);
     }
