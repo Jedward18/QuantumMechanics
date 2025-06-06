@@ -6,32 +6,26 @@
 
 
 void matrixVector(char *ordineArray, compNumber *initArray, int numVelem, int ordineArrayLen) {
-    //have the vin
-    /*
-    1) get the first gate in the vicinity of vin
-    2) look it up in the hashtable
-    3) get the gate
-    4) do the algorithm
-    */
-    printf("START OPERATIONS!!!!\n");
+
+
     int last_index = ordineArrayLen-1;
     char letter;
     mapGates *gateStruct = NULL;
     compNumber temp[numVelem];
     compNumber **gateMatrix;
 
-    printf("PRE FOR LOOP, LAST INDEX: %d\n", last_index);
+
     for(int k = last_index; k >= 0; k--){
         letter = ordineArray[k];
         
         gateStruct = hashtable_lookup(letter);
              
         if (gateStruct == NULL) {
-            printf("Gate for letter '%c' not found!\n", letter);
+     
             continue; // or handle the error as needed
         }
         gateMatrix = gateStruct->matrix;
-        printf("Letter: %c\n", letter);
+   
         
         //row of the matrix is the row of the result in our case is i
         //column of tha matrix is the row of the vin in our case is j
@@ -44,7 +38,7 @@ void matrixVector(char *ordineArray, compNumber *initArray, int numVelem, int or
                 temp[i].cImag += (gateMatrix[i][j].cReal * initArray[j].cImag) + (gateMatrix[i][j].cImag * initArray[j].cReal);
                 
             }
-            printf("Real: %g, Imaginary: %g\n\n", temp[i].cReal, temp[i].cImag);
+       
             
             
             //printf("Real: %g, Imaginary: %g\n\n", initArray[i].cReal, initArray[i].cImag);
@@ -56,7 +50,6 @@ void matrixVector(char *ordineArray, compNumber *initArray, int numVelem, int or
     }
 
 
-    printf("OPERATIONS FINISHEDD!!!!!!!!");
     
     
 

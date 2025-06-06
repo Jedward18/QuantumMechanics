@@ -78,29 +78,19 @@ int main(int argc, char *argv[])
     read_InitFile(initfilename, &qubits, &numVelem, &initArray);
     init_hashtable();
     read_CircFile(circfilename, numVelem, &ordineArray, &ordineArrayLen);
-    printHashTable();
 
-    printf("ORDINE MATRICI: ");
-    for (int i = 0; i < ordineArrayLen; i++)
-    {
-        printf(" %c ", ordineArray[i]);
-    }
 
-    printf("\n#INIT CONTENT: \n");
-    for (int i = 0; i < numVelem; i++)
-    {
-        printf("Real: %g, Imaginary: %g\n\n", initArray[i].cReal, initArray[i].cImag);
-    }
 
     matrixVector(ordineArray, initArray, numVelem, ordineArrayLen);
 
     outStrArr = convertToStr(initArray, numVelem);
 
-    printf("\nVFIN OUTPUT: \n");
+    printf("\nVout OUTPUT: \n");
     for (int i = 0; i < numVelem; i++)
     {
         printf("%s", outStrArr[i]);
         printf("\n");
     }
+
     return 0;
 }

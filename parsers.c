@@ -81,8 +81,7 @@ compNumber *parseInit(char *line, int numVelem)
             }
 
             sscanf(token, "%lf%lf", &real, &imaginary);
-            printf("Real: %g\n", real);
-            printf("Imaginary: %gi\n\n", imaginary);
+
             cnumbers[index].cReal = real;
             cnumbers[index].cImag = imaginary;
 
@@ -91,7 +90,7 @@ compNumber *parseInit(char *line, int numVelem)
             index++;
         }
 
-        printf("N elem in vector: %d\n", numVelem);
+       
     }
     else
     {
@@ -153,7 +152,7 @@ compNumber **subToken(char **tokenArray, int size)
     // print all token in the array
     for (int i = 0; i < size; i++)
     {
-        printf("\nToken n.%d: %s\n", i + 1, tokenArray[i]);
+      
 
         subToken = strtok(tokenArray[i], " ,");
         int index = 0;
@@ -162,7 +161,7 @@ compNumber **subToken(char **tokenArray, int size)
         {
             char *end;
             long intValue = strtol(subToken, &end, 10);
-            printf("SubToken: %s\n", subToken);
+ 
 
             if (subToken)
             {
@@ -181,8 +180,6 @@ compNumber **subToken(char **tokenArray, int size)
                         gateRow[i][index].cImag = -1.0;
                     }
 
-                    printf("Numero reale: %.1lf\n", gateRow[i][index].cReal);
-                    printf("Numero imaginaria: %.1lf\n", gateRow[i][index].cImag);
                 }
                 else
                 {
@@ -190,8 +187,7 @@ compNumber **subToken(char **tokenArray, int size)
                     // printf("i NON TROVATO nel token\n");
                     gateRow[i][index].cReal = (double)intValue;
                     gateRow[i][index].cImag = 0.0;
-                    printf("Numero reale: %.1lf\n", gateRow[i][index].cReal);
-                    printf("Numero imaginaria: %.1lf\n", gateRow[i][index].cImag);
+
                 }
 
                 index++;
@@ -227,14 +223,10 @@ void read_InitFile(char *filename, int *qubits, int *numVelem, compNumber **init
         }
         else if (isinitLine(line))
         {
-            printf("Numero di qubits: %d\n\n", *qubits);
+
             *initArray = realloc(*initArray, *numVelem * sizeof(compNumber));
             *initArray = parseInit(line, *numVelem);
-            /*
-            for(int i = 0; i < *numVelem; i++){
-                printf("Real: %g, Imaginary: %g\n\n", (*initArray)[i].cReal, (*initArray)[i].cImag);
-            }
-            */
+ 
         }
     }
     free(line);       // libero la memoria allocata per la riga
@@ -264,8 +256,7 @@ void read_CircFile(char *filename, int numVelem, char **ordineArray, int *ordine
 
         if ((currLine = strstr(line, "#define")) != NULL)
         {
-            printf("\n\nSubstring '#define' was found in the line.\n");
-            printf("\nNumber of qubits: %d\n", numVelem);
+ 
 
             // Allocate space for gateArray (1 character in this case)
             size++;
@@ -284,7 +275,6 @@ void read_CircFile(char *filename, int numVelem, char **ordineArray, int *ordine
             }
 
             gateArray[index] = *currLine;
-            printf("Gate: %c\n", *currLine);
 
             // Start parsing the matrix content
             if (pretoken != NULL)
@@ -324,7 +314,7 @@ void read_CircFile(char *filename, int numVelem, char **ordineArray, int *ordine
         }
         else if ((currLine = strstr(line, "#circ")) != NULL)
         {
-            printf("\n\nSubstring '#circ' was found in the line.\n");
+      
             int size = 0;
             *ordineArrayLen = 0;
 
@@ -347,17 +337,7 @@ void read_CircFile(char *filename, int numVelem, char **ordineArray, int *ordine
                 }
                 currLine++;
             }
-            /*
-                printf("OrdineArrayLen: %d\n", *ordineArrayLen);
-                printf("Ordine degli gates: \n");
 
-
-                for(int i = 0; i < size; i++){
-
-                    printf("%c\n", (*ordineArray)[i]);
-
-                }
-            */
         }
     }
     fclose(readCirc);
